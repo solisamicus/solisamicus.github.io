@@ -219,7 +219,7 @@
 </tr>
 </tbody>
 </table>
-<img src="imgs/1.png" style="zoom:33%;" />
+<style>.tggnxxmuhxvb{zoom:33%;}</style><img src="/post/9a327bc4/1.png" class="tggnxxmuhxvb">
 <p><code>new Integer()</code> &amp;&amp; <code>Integer.valueOf()</code></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">Integer</span> <span class="variable">integer1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">100</span>);</span><br><span class="line"><span class="type">Integer</span> <span class="variable">integer2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">100</span>);</span><br><span class="line">System.out.println(integer1 == integer2); <span class="comment">// 输出 false，因为它们是不同的对象</span></span><br><span class="line"></span><br><span class="line"><span class="type">Integer</span> <span class="variable">integer3</span> <span class="operator">=</span> Integer.valueOf(<span class="number">100</span>);</span><br><span class="line"><span class="type">Integer</span> <span class="variable">integer4</span> <span class="operator">=</span> Integer.valueOf(<span class="number">100</span>);</span><br><span class="line">System.out.println(integer3 == integer4); <span class="comment">// 输出 true，因为它们是同一个对象</span></span><br></pre></td></tr></table></figure>
 <p>在 <code>valueOf()</code> 方法中，首先检查传入的整数是否在 <code>-128</code> 到 <code>127</code> 的范围内。如果在这个范围内，会返回 IntegerCache 缓存中的对象；如果超出范围，则会创建新的 <code>Integer</code> 对象。</p>
@@ -343,7 +343,7 @@ true</p>
 true<br>
 true</p>
 </blockquote>
-<img src="./imgs/5.1_1.png" style="zoom:33%;" />
+<style>.qnptvfniqmwf{zoom:33%;}</style>
 <h1>6 关键字</h1>
 <h2 id="6-1-final">6.1 final</h2>
 <ul>
