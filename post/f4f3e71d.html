@@ -1,0 +1,260 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>基于ModelArts搭建MindSpore环境 | 梁嘉嘉</title><meta name="author" content="solisamicus"><meta name="copyright" content="solisamicus"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="基于ModelArts搭建MindSpore环境 对象存储服务 OBS 桶列表 $\rightarrow$ 创建桶  $\rightarrow$ 立即创建 .pfhlicwadsxf{zoom:33%;}  桶名称：project-mindspore 数据冗余存储策略：单AZ存储  .kuglhweftjem{zoom:100%;} 并行文件系统 创建并行文件系统 .heurvxueshgx{zo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于ModelArts搭建MindSpore环境">
+<meta property="og:url" content="https://solisamicus.github.io/post/f4f3e71d.html">
+<meta property="og:site_name" content="梁嘉嘉">
+<meta property="og:description" content="基于ModelArts搭建MindSpore环境 对象存储服务 OBS 桶列表 $\rightarrow$ 创建桶  $\rightarrow$ 立即创建 .pfhlicwadsxf{zoom:33%;}  桶名称：project-mindspore 数据冗余存储策略：单AZ存储  .kuglhweftjem{zoom:100%;} 并行文件系统 创建并行文件系统 .heurvxueshgx{zo">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://solisamicus.github.io/img/mindspore/mindspore-modelarts/cover.png">
+<meta property="article:published_time" content="2025-01-06T08:45:00.000Z">
+<meta property="article:modified_time" content="2024-01-06T08:45:00.000Z">
+<meta property="article:author" content="solisamicus">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://solisamicus.github.io/img/mindspore/mindspore-modelarts/cover.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "基于ModelArts搭建MindSpore环境",
+  "url": "https://solisamicus.github.io/post/f4f3e71d.html",
+  "image": "https://solisamicus.github.io/img/mindspore/mindspore-modelarts/cover.png",
+  "datePublished": "2025-01-06T08:45:00.000Z",
+  "dateModified": "2024-01-06T08:45:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "solisamicus",
+      "url": "https://solisamicus.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://solisamicus.github.io/post/f4f3e71d.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '基于ModelArts搭建MindSpore环境',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar-img.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/mindspore/mindspore-modelarts/top_img.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"></a><a class="nav-page-title" href="/"><span class="site-name">基于ModelArts搭建MindSpore环境</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">基于ModelArts搭建MindSpore环境</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-01-06T08:45:00.000Z" title="发表于 2025-01-06 16:45:00">2025-01-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-01-06T08:45:00.000Z" title="更新于 2024-01-06 16:45:00">2024-01-06</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1>基于ModelArts搭建MindSpore环境</h1>
+<h2 id="对象存储服务-OBS">对象存储服务 OBS</h2>
+<p><strong>桶列表</strong> $\rightarrow$ <strong>创建桶</strong>  $\rightarrow$ <strong>立即创建</strong></p>
+<style>.pfhlicwadsxf{zoom:33%;}</style><img src="/post/f4f3e71d/1.png" class="pfhlicwadsxf">
+<ul>
+<li>桶名称：<code>project-mindspore</code></li>
+<li>数据冗余存储策略：<code>单AZ存储</code></li>
+</ul>
+<style>.kuglhweftjem{zoom:100%;}</style><img src="/post/f4f3e71d/2.png" class="kuglhweftjem">
+<h2 id="并行文件系统">并行文件系统</h2>
+<p><strong>创建并行文件系统</strong></p>
+<style>.heurvxueshgx{zoom:100%;}</style><img src="/post/f4f3e71d/3.png" class="heurvxueshgx">
+<ul>
+<li>文件系统名称：<code>modelarts-mindspore</code></li>
+<li>数据冗余存储策略：<code>单AZ存储</code></li>
+</ul>
+<style>.pupkvhwyijpu{zoom:100%;}</style><img src="/post/f4f3e71d/4.png" class="pupkvhwyijpu">
+<h2 id="AI开发平台ModelArts">AI开发平台ModelArts</h2>
+<p>系统管理：<strong>权限管理</strong> $\rightarrow$ <strong>添加授权</strong></p>
+<style>.eygwnlhetthx{zoom:100%;}</style><img src="/post/f4f3e71d/5.png" class="eygwnlhetthx">
+<p>开发生产：<strong>开发空间</strong> $\rightarrow$ <strong>Notebook</strong> $\rightarrow$ <strong>创建 Notebook</strong></p>
+<ul>
+<li>名称：<code>notebook-mindspore</code></li>
+<li>自动停止：1 小时</li>
+<li>镜像：公共镜像，<code>mindspore1.7.0-cuda10.1-py3.7-ubuntu18.04</code></li>
+<li>资源类型：公共资源池</li>
+<li>类型：GPU</li>
+<li>实例规格：GPU: 1*Pnt1(16GB)|CPU: 8核 64GB</li>
+<li>存储配置：云硬盘 EVS，50 GB</li>
+</ul>
+<style>.kievpzivslup{zoom:100%;}</style><img src="/post/f4f3e71d/6.png" class="kievpzivslup">
+<style>.hrlfoumrrtxg{zoom:100%;}</style><img src="/post/f4f3e71d/7.png" class="hrlfoumrrtxg">
+<p>点击 <code>notebook-mindspore</code>：<strong>存储配置</strong> $\rightarrow$ <strong>添加数据配置</strong></p>
+<style>.ngtumyryyqvb{zoom:100%;}</style><img src="/post/f4f3e71d/8.png" class="ngtumyryyqvb">
+<p><code>obs://modelarts-mindspore/input/</code> $\Leftrightarrow$ <code>/data/input</code></p>
+<p>打开 <code>notebook-mindspore</code>，点击 Terminal：</p>
+<style>.dyrnbioeggop{zoom:100%;}</style><img src="/post/f4f3e71d/9.png" class="dyrnbioeggop">
+<style>.frttigxqpfwe{zoom:100%;}</style><img src="/post/f4f3e71d/10.png" class="frttigxqpfwe">
+<style>.oepemgunjgmn{zoom:100%;}</style><img src="/post/f4f3e71d/11.png" class="oepemgunjgmn">
+<style>.dnvqbuykxsjq{zoom:100%;}</style><img src="/post/f4f3e71d/12.png" class="dnvqbuykxsjq">
+<h2 id="MindSpore">MindSpore</h2>
+<h3 id="清理环境">清理环境</h3>
+<p><strong>查看当前 Conda 环境</strong>：</p>
+<style>.wmpatdsewfbf{zoom:100%;}</style><img src="/post/f4f3e71d/12.png" class="wmpatdsewfbf">
+<p><strong>退出当前环境</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ conda deactivate</span><br></pre></td></tr></table></figure>
+<p><strong>删除 MindSpore 环境</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ conda remove -n MindSpore --all</span><br></pre></td></tr></table></figure>
+<h3 id="重新安装"><strong>重新安装</strong></h3>
+<p><a target="_blank" rel="noopener" href="https://www.mindspore.cn/install">官网</a></p>
+<p><strong>创建并激活 Conda 虚拟环境</strong>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ conda create -n mindspore_py39 python=3.9 -y</span><br><span class="line">$ conda activate mindspore_py39</span><br></pre></td></tr></table></figure>
+<p><strong>安装 MindSpore</strong>：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">conda install mindspore=2.4.10 -c mindspore -c conda-forge</span></span><br></pre></td></tr></table></figure>
+<h3 id="验证安装">验证安装</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ python -c <span class="string">&quot;import mindspore;mindspore.set_context(device_target=&#x27;CPU&#x27;);mindspore.run_check()&quot;</span></span><br></pre></td></tr></table></figure>
+<style>.qtcfcnjmqfcm{zoom:100%;}</style><img src="/post/f4f3e71d/13.png" class="qtcfcnjmqfcm"></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://solisamicus.github.io">solisamicus</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://solisamicus.github.io/post/f4f3e71d.html">https://solisamicus.github.io/post/f4f3e71d.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://solisamicus.github.io" target="_blank">梁嘉嘉</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/mindspore/mindspore-modelarts/cover.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar-img.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">solisamicus</div><div class="author-info-description">欢迎一起交流与探讨</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">19</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/solisamicus" target="_blank" title="github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:solisamicus@163.com" target="_blank" title="email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="https://space.bilibili.com/474885698" target="_blank" title="bilibili"><i class="fa-brands fa-bilibili" style="color: #00B6F0;"></i></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">基于ModelArts搭建MindSpore环境</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8%E6%9C%8D%E5%8A%A1-OBS"><span class="toc-number">1.1.</span> <span class="toc-text">对象存储服务 OBS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B9%B6%E8%A1%8C%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.2.</span> <span class="toc-text">并行文件系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#AI%E5%BC%80%E5%8F%91%E5%B9%B3%E5%8F%B0ModelArts"><span class="toc-number">1.3.</span> <span class="toc-text">AI开发平台ModelArts</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MindSpore"><span class="toc-number">1.4.</span> <span class="toc-text">MindSpore</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B8%85%E7%90%86%E7%8E%AF%E5%A2%83"><span class="toc-number">1.4.1.</span> <span class="toc-text">清理环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%87%8D%E6%96%B0%E5%AE%89%E8%A3%85"><span class="toc-number">1.4.2.</span> <span class="toc-text">重新安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81%E5%AE%89%E8%A3%85"><span class="toc-number">1.4.3.</span> <span class="toc-text">验证安装</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/post/f4f3e71d.html" title="基于ModelArts搭建MindSpore环境"><img src="/img/mindspore/mindspore-modelarts/cover.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="基于ModelArts搭建MindSpore环境"/></a><div class="content"><a class="title" href="/post/f4f3e71d.html" title="基于ModelArts搭建MindSpore环境">基于ModelArts搭建MindSpore环境</a><time datetime="2025-01-06T08:45:00.000Z" title="发表于 2025-01-06 16:45:00">2025-01-06</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/617a9415.html" title="Go-函数和方法"><img src="/img/go/go-%E5%87%BD%E6%95%B0%E5%92%8C%E6%96%B9%E6%B3%95/cover.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Go-函数和方法"/></a><div class="content"><a class="title" href="/post/617a9415.html" title="Go-函数和方法">Go-函数和方法</a><time datetime="2024-12-30T12:05:00.000Z" title="发表于 2024-12-30 20:05:00">2024-12-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/69befbd8.html" title="Go-数据类型"><img src="/img/go/go-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/cover.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Go-数据类型"/></a><div class="content"><a class="title" href="/post/69befbd8.html" title="Go-数据类型">Go-数据类型</a><time datetime="2024-12-30T11:25:00.000Z" title="发表于 2024-12-30 19:25:00">2024-12-30</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/20718b51.html" title="分布式事务-Seata"><img src="/img/seata/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1-Seata/cover.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="分布式事务-Seata"/></a><div class="content"><a class="title" href="/post/20718b51.html" title="分布式事务-Seata">分布式事务-Seata</a><time datetime="2024-12-26T14:30:00.000Z" title="发表于 2024-12-26 22:30:00">2024-12-26</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/post/66c016fb.html" title="JVM">JVM</a><time datetime="2024-12-26T14:30:00.000Z" title="发表于 2024-12-26 22:30:00">2024-12-26</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By solisamicus</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Dream big, work hard, stay focused.<p><a target="_blank" href="https://hexo.io/"><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&logo=hexo"></a> <a target="_blank" href="https://butterfly.js.org/"><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&logo=bitdefender"></a> <a target="_blank" href="https://github.com/"><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&logo=GitHub"></a> <a target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&logo=Claris"></a></p></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax/es5/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
